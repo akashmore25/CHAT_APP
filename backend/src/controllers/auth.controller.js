@@ -72,6 +72,7 @@ export const login = async (req,res)=>{
         fullName:user.fullName,
         email:user.email,
         profilePic:user.profilePic,
+         createdAt: user.createdAt, 
     })
     }else{   
         res.status(400).json({message:"Invalid user data"})
@@ -96,7 +97,12 @@ export const logout = async (req,res)=>{
 export const updateProfile = async (req,res)=>{
  try {
     const userId = req.user._id;
-    const {profilePic} = req.body;
+       console.log("heloo 33 ");
+
+   const { profilePic } = req.body || {};
+   console.log("heloo ");
+   
+   console.log(`profile pic => ${profilePic}`);
     if(!profilePic){
         return res.status(401).json({message:"profile pic is required"});
     }
