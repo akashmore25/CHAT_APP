@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { axiosInstanace } from "../lib/axios";
 import { Users } from "lucide-react";
 
-export const useChatStore = create ((set)=>({
+export const useChatStore = create ((set,get)=>({
  messages:[],
  users:[],
  selectedUser:null,
@@ -15,7 +15,6 @@ set({isUsersLoading:true});
 try{
 const res = await axiosInstanace.get("/messages/users");
 set({users:res.data});
-console.log(res.data);
 }catch(error){
 toast.error(error.response.data.message);
 }finally{
@@ -35,7 +34,18 @@ getMessages: async (userId)=>{
     }
 },
   
+sendMessage: async (messageData) => {
+   const {selectedUser,messages} = get();
+   try {
+    const res = await axiosInstanace.post(`/messages/send/${selectedUser._id}`,messageData);
+    set({messages:[...messages,res.data]});
+   } catch (error) {
+    toast.error(error.response.data.message);
+   }
+},
+
  // todo:optimize this one later 
   setSelectedUser: (selectedUser) => set({selectedUser})
+  
 
 }));
